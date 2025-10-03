@@ -1,0 +1,61 @@
+name: PR Reopen
+
+on:
+  pull_request:
+    types: [reopened]
+
+jobs:
+  pr-reopen:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Handle reopened PR
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const { data: pr } = await github.rest.pulls.get({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: context.issue.number
+          });
+
+          const status = pr.state;
+          const draft = pr.draft;
+
+          if (status !== 'open') {
+            console.log('PR is not open');
+            return;
+          }
+
+          // Remove closed and merged labels
+          await github.rest.issues.removeLabel({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+            name: 'status: closed'
+          });
+
+          await github.rest.issues.removeLabel({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+            name: 'status: merged'
+          });
+
+          await github.rest.issues.removeLabel({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+            name: 'merged'
+          });
+
+          // Add appropriate status label
+          const statusLabel = draft ? 'status: draft' : 'status: ready-for-review';
+
+          await github.rest.issues.addLabels({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+            labels: [statusLabel]
+          });
+
+          console.log(`PR reopened with status: ${statusLabel}`);

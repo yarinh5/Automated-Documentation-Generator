@@ -1,0 +1,49 @@
+name: PR Title
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  pr-title:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check PR title
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const title = context.payload.pull_request.title;
+          const validTypes = ['feat', 'fix', 'docs', 'style', 'refactor', 'perf', 'test', 'chore', 'ci', 'build', 'revert'];
+          const validScopes = ['cli', 'core', 'search', 'generator', 'api', 'tests', 'docs', 'ci-cd', 'docker'];
+
+          const regex = /^(\w+)(\(([^)]+)\))?: (.+)$/;
+          const match = title.match(regex);
+
+          if (!match) {
+            core.setFailed('PR title must follow conventional commit format: type(scope): description');
+            return;
+          }
+
+          const [, type, , scope, description] = match;
+
+          if (!validTypes.includes(type)) {
+            core.setFailed(`Invalid type: ${type}. Must be one of: ${validTypes.join(', ')}`);
+            return;
+          }
+
+          if (scope && !validScopes.includes(scope)) {
+            core.setFailed(`Invalid scope: ${scope}. Must be one of: ${validScopes.join(', ')}`);
+            return;
+          }
+
+          if (description.length < 10) {
+            core.setFailed('Description must be at least 10 characters long');
+            return;
+          }
+
+          if (description.length > 100) {
+            core.setFailed('Description must be no more than 100 characters long');
+            return;
+          }
+
+          console.log(`PR title is valid: ${type}(${scope || 'none'}): ${description}`);

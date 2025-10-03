@@ -1,0 +1,20 @@
+{
+  "name": "Automated Documentation Generator",
+  "description": "AI-powered documentation generator with semantic search capabilities",
+  "version": "1.0.0",
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": "https://github.com/your-username/automated-documentation-generator",
+  "homepage": "https://github.com/your-username/automated-documentation-generator#readme",
+  "bugs": "https://github.com/your-username/automated-documentation-generator/issues",
+  "keywords": [
+    "documentation",
+    "ai",
+    "gpt-4",
+    "semantic-search",
+    "embeddings",
+    "automation",
+    "typescript",
+    "nodejs"
+  ]
+}

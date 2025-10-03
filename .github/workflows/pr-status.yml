@@ -1,0 +1,43 @@
+name: PR Status
+
+on:
+  pull_request:
+    types: [opened, synchronize, closed]
+
+jobs:
+  pr-status:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Update PR status
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const { data: pr } = await github.rest.pulls.get({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: context.issue.number
+          });
+
+          const status = pr.state;
+          const merged = pr.merged;
+          const draft = pr.draft;
+
+          if (status === 'open' && !draft) {
+            console.log('PR is open and ready for review');
+          } else if (status === 'open' && draft) {
+            console.log('PR is open but still in draft');
+          } else if (status === 'closed' && merged) {
+            console.log('PR was merged');
+          } else if (status === 'closed' && !merged) {
+            console.log('PR was closed without merging');
+          }
+
+          // Add status label
+          const statusLabel = draft ? 'status: draft' : 'status: ready-for-review';
+
+          await github.rest.issues.addLabels({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+            labels: [statusLabel]
+          });

@@ -1,0 +1,156 @@
+# Labeler configuration for Automated Documentation Generator
+
+# Type labels based on file changes
+type: bug:
+  - 'src/**/*.ts'
+  - 'tests/**/*.ts'
+  - 'examples/**/*.ts'
+
+type: enhancement:
+  - 'src/**/*.ts'
+  - 'tests/**/*.ts'
+  - 'examples/**/*.ts'
+
+type: documentation:
+  - '*.md'
+  - 'docs/**/*'
+  - 'examples/**/*.md'
+
+# Component labels based on file paths
+component: cli:
+  - 'src/cli/**/*'
+
+component: core:
+  - 'src/core/**/*'
+
+component: search:
+  - 'src/core/SemanticSearch.ts'
+
+component: generator:
+  - 'src/core/DocumentationGenerator.ts'
+
+component: api:
+  - 'src/index.ts'
+  - 'src/types/**/*'
+
+component: tests:
+  - 'tests/**/*'
+  - '**/*.test.ts'
+  - '**/*.spec.ts'
+
+component: docs:
+  - '*.md'
+  - 'docs/**/*'
+
+component: ci-cd:
+  - '.github/workflows/**/*'
+  - '.github/**/*.yml'
+
+component: docker:
+  - 'Dockerfile'
+  - 'docker-compose.yml'
+  - '.dockerignore'
+
+# Technology labels based on file extensions
+tech: typescript:
+  - '**/*.ts'
+  - '**/*.tsx'
+
+tech: nodejs:
+  - 'package.json'
+  - 'package-lock.json'
+
+tech: docker:
+  - 'Dockerfile'
+  - 'docker-compose.yml'
+
+tech: jest:
+  - 'jest.config.js'
+  - '**/*.test.ts'
+  - '**/*.spec.ts'
+
+tech: eslint:
+  - '.eslintrc.js'
+  - '.eslintignore'
+
+tech: prettier:
+  - '.prettierrc'
+  - '.prettierignore'
+
+# Priority labels based on file changes
+priority: high:
+  - 'src/core/**/*'
+  - 'src/index.ts'
+
+priority: medium:
+  - 'src/cli/**/*'
+  - 'tests/**/*'
+
+priority: low:
+  - 'examples/**/*'
+  - 'docs/**/*'
+
+# Size labels based on file changes
+size: xs:
+  - '*.json'
+  - '*.yml'
+  - '*.yaml'
+
+size: s:
+  - '*.md'
+  - '*.js'
+
+size: m:
+  - 'src/**/*.ts'
+  - 'tests/**/*.ts'
+
+size: l:
+  - 'src/core/**/*.ts'
+  - 'examples/**/*.ts'
+
+# Special labels
+good first issue:
+  - 'examples/**/*'
+  - 'docs/**/*'
+  - 'tests/**/*'
+
+help wanted:
+  - 'src/**/*.ts'
+  - 'tests/**/*.ts'
+
+breaking-change:
+  - 'src/index.ts'
+  - 'src/types/**/*'
+
+security:
+  - 'src/core/**/*'
+  - '.github/workflows/security.yml'
+
+performance:
+  - 'src/core/**/*'
+  - 'src/cli/**/*'
+
+dependencies:
+  - 'package.json'
+  - 'package-lock.json'
+
+github-actions:
+  - '.github/workflows/**/*'
+
+docker:
+  - 'Dockerfile'
+  - 'docker-compose.yml'
+
+javascript:
+  - '**/*.js'
+  - '**/*.mjs'
+
+markdown:
+  - '**/*.md'
+
+yaml:
+  - '**/*.yml'
+  - '**/*.yaml'
+
+json:
+  - '**/*.json'

@@ -1,0 +1,55 @@
+name: PR Edit
+
+on:
+  pull_request:
+    types: [edited]
+
+jobs:
+  pr-edit:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Handle edited PR
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const { data: pr } = await github.rest.pulls.get({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: context.issue.number
+          });
+
+          const status = pr.state;
+          const draft = pr.draft;
+
+          if (status !== 'open') {
+            console.log('PR is not open');
+            return;
+          }
+
+          // Update status label based on draft status
+          const statusLabel = draft ? 'status: draft' : 'status: ready-for-review';
+
+          // Remove old status labels
+          await github.rest.issues.removeLabel({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+            name: 'status: draft'
+          });
+
+          await github.rest.issues.removeLabel({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+            name: 'status: ready-for-review'
+          });
+
+          // Add new status label
+          await github.rest.issues.addLabels({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+            labels: [statusLabel]
+          });
+
+          console.log(`PR edited, status updated to: ${statusLabel}`);

@@ -1,0 +1,48 @@
+name: PR Description
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  pr-description:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check PR description
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const description = context.payload.pull_request.body || '';
+          const title = context.payload.pull_request.title;
+
+          if (!description || description.trim().length < 50) {
+            core.setFailed('PR description must be at least 50 characters long');
+            return;
+          }
+
+          if (description.includes('TODO') || description.includes('FIXME')) {
+            core.setFailed('PR description should not contain TODO or FIXME comments');
+            return;
+          }
+
+          if (description.includes('WIP') || description.includes('work in progress')) {
+            core.setFailed('PR description should not contain WIP or work in progress');
+            return;
+          }
+
+          if (description.includes('test') && !description.includes('test')) {
+            core.setFailed('PR description should mention testing if this is a test-related change');
+            return;
+          }
+
+          if (description.includes('fix') && !description.includes('bug')) {
+            core.setFailed('PR description should mention the bug being fixed');
+            return;
+          }
+
+          if (description.includes('feat') && !description.includes('feature')) {
+            core.setFailed('PR description should mention the feature being added');
+            return;
+          }
+
+          console.log('PR description is valid');

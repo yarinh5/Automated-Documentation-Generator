@@ -1,0 +1,91 @@
+name: PR Unlabeled
+
+on:
+  pull_request:
+    types: [unlabeled]
+
+jobs:
+  pr-unlabeled:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Handle unlabeled PR
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const { data: pr } = await github.rest.pulls.get({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: context.issue.number
+          });
+
+          const status = pr.state;
+          const draft = pr.draft;
+
+          if (status !== 'open') {
+            console.log('PR is not open');
+            return;
+          }
+
+          if (draft) {
+            console.log('PR is still in draft');
+            return;
+          }
+
+          const label = context.payload.label;
+          const labelName = label.name;
+
+          if (labelName === 'status: draft') {
+            console.log('PR unlabeled as draft');
+
+            // Add ready for review label
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: ['status: ready-for-review']
+            });
+
+          } else if (labelName === 'status: ready-for-review') {
+            console.log('PR unlabeled as ready for review');
+
+            // Add draft label
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: ['status: draft']
+            });
+
+          } else if (labelName === 'needs-review') {
+            console.log('PR unlabeled as needs review');
+
+            // Add ready for review label
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: ['status: ready-for-review']
+            });
+
+          } else if (labelName === 'approved') {
+            console.log('PR unlabeled as approved');
+
+            // Add needs review label
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: ['needs-review']
+            });
+
+          } else if (labelName === 'changes-requested') {
+            console.log('PR unlabeled as changes requested');
+
+            // Add needs review label
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: ['needs-review']
+            });
+          }

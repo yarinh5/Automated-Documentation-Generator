@@ -1,0 +1,83 @@
+name: PR Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  pr-review:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Request review
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const { data: pr } = await github.rest.pulls.get({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: context.issue.number
+          });
+
+          const reviewers = pr.requested_reviewers;
+          const assignees = pr.assignees;
+
+          if (reviewers.length === 0) {
+            // Auto-assign reviewers based on file changes
+            const { data: files } = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number
+            });
+
+            const reviewersToAdd = [];
+
+            // Add reviewers based on file changes
+            if (files.some(f => f.filename.startsWith('src/core/'))) {
+              reviewersToAdd.push('core-reviewer');
+            }
+
+            if (files.some(f => f.filename.startsWith('src/cli/'))) {
+              reviewersToAdd.push('cli-reviewer');
+            }
+
+            if (files.some(f => f.filename.startsWith('tests/'))) {
+              reviewersToAdd.push('test-reviewer');
+            }
+
+            if (files.some(f => f.filename.endsWith('.md'))) {
+              reviewersToAdd.push('docs-reviewer');
+            }
+
+            if (reviewersToAdd.length > 0) {
+              await github.rest.pulls.requestReviewers({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.issue.number,
+                reviewers: reviewersToAdd
+              });
+
+              console.log(`Requested review from: ${reviewersToAdd.join(', ')}`);
+            }
+          }
+
+          // Add review labels
+          const labels = ['needs-review'];
+
+          if (files.some(f => f.filename.startsWith('src/core/'))) {
+            labels.push('component: core');
+          }
+
+          if (files.some(f => f.filename.startsWith('src/cli/'))) {
+            labels.push('component: cli');
+          }
+
+          if (files.some(f => f.filename.startsWith('tests/'))) {
+            labels.push('component: tests');
+          }
+
+          await github.rest.issues.addLabels({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+            labels: labels
+          });

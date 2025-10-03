@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  auto-docs:
+    build: .
+    container_name: automated-documentation-generator
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - NODE_ENV=production
+    volumes:
+      - ./:/workspace
+      - ./docs:/app/docs
+      - ./.docs:/app/.docs
+    working_dir: /workspace
+    command: ["node", "/app/dist/cli/index.js", "generate", "--path", "/workspace"]
+    profiles:
+      - generate
+
+  auto-docs-search:
+    build: .
+    container_name: auto-docs-search
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - NODE_ENV=production
+    volumes:
+      - ./:/workspace
+      - ./.docs:/app/.docs
+    working_dir: /workspace
+    command: ["node", "/app/dist/cli/index.js", "search", "--path", "/workspace"]
+    profiles:
+      - search
+    stdin_open: true
+    tty: true
+
+  auto-docs-init:
+    build: .
+    container_name: auto-docs-init
+    volumes:
+      - ./:/workspace
+    working_dir: /workspace
+    command: ["node", "/app/dist/cli/index.js", "init", "--path", "/workspace"]
+    profiles:
+      - init

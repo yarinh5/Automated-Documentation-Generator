@@ -1,0 +1,87 @@
+name: PR Ready
+
+on:
+  pull_request:
+    types: [ready_for_review]
+
+jobs:
+  pr-ready:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Handle ready for review PR
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const { data: pr } = await github.rest.pulls.get({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: context.issue.number
+          });
+
+          const status = pr.state;
+          const draft = pr.draft;
+
+          if (status !== 'open') {
+            console.log('PR is not open');
+            return;
+          }
+
+          if (draft) {
+            console.log('PR is still in draft');
+            return;
+          }
+
+          // Remove draft label
+          await github.rest.issues.removeLabel({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+            name: 'status: draft'
+          });
+
+          // Add ready for review label
+          await github.rest.issues.addLabels({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+            labels: ['status: ready-for-review']
+          });
+
+          // Request review from appropriate reviewers
+          const { data: files } = await github.rest.pulls.listFiles({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: context.issue.number
+          });
+
+          const reviewersToAdd = [];
+
+          // Add reviewers based on file changes
+          if (files.some(f => f.filename.startsWith('src/core/'))) {
+            reviewersToAdd.push('core-reviewer');
+          }
+
+          if (files.some(f => f.filename.startsWith('src/cli/'))) {
+            reviewersToAdd.push('cli-reviewer');
+          }
+
+          if (files.some(f => f.filename.startsWith('tests/'))) {
+            reviewersToAdd.push('test-reviewer');
+          }
+
+          if (files.some(f => f.filename.endsWith('.md'))) {
+            reviewersToAdd.push('docs-reviewer');
+          }
+
+          if (reviewersToAdd.length > 0) {
+            await github.rest.pulls.requestReviewers({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+              reviewers: reviewersToAdd
+            });
+
+            console.log(`Requested review from: ${reviewersToAdd.join(', ')}`);
+          }
+
+          console.log('PR is ready for review');

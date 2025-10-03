@@ -1,0 +1,68 @@
+name: PR Draft
+
+on:
+  pull_request:
+    types: [converted_to_draft]
+
+jobs:
+  pr-draft:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Handle draft PR
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const { data: pr } = await github.rest.pulls.get({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: context.issue.number
+          });
+
+          const status = pr.state;
+          const draft = pr.draft;
+
+          if (status !== 'open') {
+            console.log('PR is not open');
+            return;
+          }
+
+          if (!draft) {
+            console.log('PR is not in draft');
+            return;
+          }
+
+          // Remove ready for review label
+          await github.rest.issues.removeLabel({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+            name: 'status: ready-for-review'
+          });
+
+          // Add draft label
+          await github.rest.issues.addLabels({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+            labels: ['status: draft']
+          });
+
+          // Remove reviewers
+          const { data: reviewers } = await github.rest.pulls.listRequestedReviewers({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: context.issue.number
+          });
+
+          if (reviewers.users.length > 0) {
+            await github.rest.pulls.removeRequestedReviewers({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+              reviewers: reviewers.users.map(r => r.login)
+            });
+
+            console.log(`Removed reviewers: ${reviewers.users.map(r => r.login).join(', ')}`);
+          }
+
+          console.log('PR converted to draft');

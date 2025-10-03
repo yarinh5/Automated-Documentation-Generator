@@ -1,0 +1,60 @@
+name: PR Labels
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  pr-labels:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check PR labels
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const labels = context.payload.pull_request.labels.map(l => l.name);
+          const validLabels = [
+            'type: bug', 'type: enhancement', 'type: documentation', 'type: question',
+            'priority: critical', 'priority: high', 'priority: medium', 'priority: low',
+            'component: cli', 'component: core', 'component: search', 'component: generator',
+            'component: api', 'component: tests', 'component: docs', 'component: ci-cd',
+            'component: docker', 'tech: typescript', 'tech: nodejs', 'tech: openai',
+            'tech: docker', 'tech: jest', 'tech: eslint', 'tech: prettier',
+            'difficulty: easy', 'difficulty: medium', 'difficulty: hard',
+            'size: xs', 'size: s', 'size: m', 'size: l', 'size: xl',
+            'good first issue', 'help wanted', 'breaking-change', 'security',
+            'performance', 'dependencies', 'github-actions', 'docker',
+            'javascript', 'markdown', 'yaml', 'json'
+          ];
+
+          const invalidLabels = labels.filter(l => !validLabels.includes(l));
+
+          if (invalidLabels.length > 0) {
+            core.setFailed(`Invalid labels: ${invalidLabels.join(', ')}`);
+            return;
+          }
+
+          if (labels.length === 0) {
+            core.setFailed('PR must have at least one label');
+            return;
+          }
+
+          const hasType = labels.some(l => l.startsWith('type:'));
+          if (!hasType) {
+            core.setFailed('PR must have a type label');
+            return;
+          }
+
+          const hasPriority = labels.some(l => l.startsWith('priority:'));
+          if (!hasPriority) {
+            core.setFailed('PR must have a priority label');
+            return;
+          }
+
+          const hasComponent = labels.some(l => l.startsWith('component:'));
+          if (!hasComponent) {
+            core.setFailed('PR must have a component label');
+            return;
+          }
+
+          console.log(`PR has ${labels.length} valid labels`);
