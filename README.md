@@ -1,4 +1,4 @@
-# 🤖 Automated Documentation Generator
+#  Automated Documentation Generator
 
 > AI-powered documentation generator with semantic search capabilities
 
@@ -9,18 +9,18 @@
 
 A powerful tool that automatically generates beautiful, comprehensive documentation for your codebase using GPT-4 and provides intelligent semantic search capabilities through embeddings.
 
-## ✨ Features
+##  Features
 
-- 🎨 **Apple-style Documentation**: Clean, minimal, and elegant documentation design
-- 🤖 **GPT-4 Powered**: Intelligent documentation generation using OpenAI's latest model
-- 🔍 **Semantic Search**: Find code using natural language queries with embeddings
-- 📚 **Comprehensive Coverage**: Generates README, API docs, and code examples
-- ⚡ **TypeScript Support**: Full TypeScript support with type definitions
-- 🎯 **Smart Analysis**: Automatically analyzes functions, classes, interfaces, and types
-- 🔧 **CLI Interface**: Easy-to-use command-line interface
-- 📦 **Programmatic API**: Use as a library in your own projects
+-  **Apple-style Documentation**: Clean, minimal, and elegant documentation design
+-  **GPT-4 Powered**: Intelligent documentation generation using OpenAI's latest model
+-  **Semantic Search**: Find code using natural language queries with embeddings
+-  **Comprehensive Coverage**: Generates README, API docs, and code examples
+-  **TypeScript Support**: Full TypeScript support with type definitions
+-  **Smart Analysis**: Automatically analyzes functions, classes, interfaces, and types
+-  **CLI Interface**: Easy-to-use command-line interface
+-  **Programmatic API**: Use as a library in your own projects
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Installation
 
@@ -50,7 +50,7 @@ auto-docs generate
 auto-docs search --query "authentication function"
 ```
 
-## 📖 Documentation
+##  Documentation
 
 ### CLI Commands
 
@@ -109,7 +109,7 @@ const codeFiles = await autoDocs.analyzeProject();
 await autoDocs.generateEmbeddings();
 ```
 
-## 🎨 Documentation Styles
+##  Documentation Styles
 
 ### Apple Style (Default)
 Clean, minimal design with:
@@ -151,7 +151,7 @@ auto-docs search --query "error handling try catch"
 auto-docs search --query "calculateTotal function"
 ```
 
-## ⚙️ Configuration
+##  Configuration
 
 Create a `docs.config.json` file to customize your documentation:
 
@@ -169,7 +169,7 @@ Create a `docs.config.json` file to customize your documentation:
 }
 ```
 
-## 🛠️ Development
+##  Development
 
 ### Prerequisites
 - Node.js 18+
@@ -191,7 +191,7 @@ npm run build
 - `npm run format` - Format code with Prettier
 - `npm test` - Run tests
 
-## 🤝 Contributing
+##  Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -199,26 +199,15 @@ npm run build
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📄 License
+##  License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+##  Acknowledgments
 
 - [OpenAI](https://openai.com/) for the amazing GPT-4 API
 - [TypeScript](https://www.typescriptlang.org/) for the excellent type system
 - [Commander.js](https://github.com/tj/commander.js) for the CLI framework
 - [Chalk](https://github.com/chalk/chalk) for beautiful terminal colors
 
-## 📞 Support
-
-- 📧 Email: support@myproject.com
-- 🐛 Issues: [GitHub Issues](https://github.com/your-username/automated-documentation-generator/issues)
-- 💬 Discussions: [GitHub Discussions](https://github.com/your-username/automated-documentation-generator/discussions)
-
 ---
-
-<div align="center">
-  <p>Made with ❤️ by developers, for developers</p>
-  <p>⭐ Star this repo if you found it helpful!</p>
-</div>
