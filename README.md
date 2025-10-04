@@ -1,6 +1,3 @@
-#  Automated Documentation Generator
-
-> AI-powered documentation generator with semantic search capabilities
 
 A powerful tool that automatically generates beautiful, comprehensive documentation for your codebase using GPT-4 and provides intelligent semantic search capabilities through embeddings.
 
@@ -126,7 +123,7 @@ Comprehensive design with:
 - Detailed sections
 - Extensive examples
 
-## 🔍 Semantic Search
+## Semantic Search
 
 The semantic search feature uses OpenAI's embeddings to understand the meaning of your code and queries, allowing you to find relevant code using natural language.
 
@@ -193,3 +190,16 @@ npm run build
 3. Commit your changes (`git commit -m 'Add amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
+
+##  License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+##  Acknowledgments
+
+- [OpenAI](https://openai.com/) for the amazing GPT-4 API
+- [TypeScript](https://www.typescriptlang.org/) for the excellent type system
+- [Commander.js](https://github.com/tj/commander.js) for the CLI framework
+- [Chalk](https://github.com/chalk/chalk) for beautiful terminal colors
+
+---
