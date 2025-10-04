@@ -2,11 +2,6 @@
 
 > AI-powered documentation generator with semantic search capabilities
 
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/your-username/automated-documentation-generator)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.3+-blue.svg)](https://www.typescriptlang.org/)
-[![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4-purple.svg)](https://openai.com/)
-
 A powerful tool that automatically generates beautiful, comprehensive documentation for your codebase using GPT-4 and provides intelligent semantic search capabilities through embeddings.
 
 ##  Features
@@ -198,16 +193,3 @@ npm run build
 3. Commit your changes (`git commit -m 'Add amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
-
-##  License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-##  Acknowledgments
-
-- [OpenAI](https://openai.com/) for the amazing GPT-4 API
-- [TypeScript](https://www.typescriptlang.org/) for the excellent type system
-- [Commander.js](https://github.com/tj/commander.js) for the CLI framework
-- [Chalk](https://github.com/chalk/chalk) for beautiful terminal colors
-
----
