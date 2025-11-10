@@ -13,7 +13,7 @@ jobs:
         fetch-depth: 0
 
     - name: Check for merge commits
-      uses: actions/github-script@v7
+      uses: actions/github-script@v8
       with:
         script: |
           const { data: commits } = await github.rest.pulls.listCommits({
@@ -32,7 +32,7 @@ jobs:
           console.log('No merge commits found');
 
     - name: Check for large files
-      uses: actions/github-script@v7
+      uses: actions/github-script@v8
       with:
         script: |
           const { data: files } = await github.rest.pulls.listFiles({
@@ -51,7 +51,7 @@ jobs:
           console.log('No large files found');
 
     - name: Check for sensitive files
-      uses: actions/github-script@v7
+      uses: actions/github-script@v8
       with:
         script: |
           const { data: files } = await github.rest.pulls.listFiles({
@@ -76,7 +76,7 @@ jobs:
           console.log('No sensitive files found');
 
     - name: Check for binary files
-      uses: actions/github-script@v7
+      uses: actions/github-script@v8
       with:
         script: |
           const { data: files } = await github.rest.pulls.listFiles({
